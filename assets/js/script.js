@@ -1,7 +1,7 @@
 (() => {
   "use strict";
 
-  /* DOM */
+  /* ═══════════ DOM ═══════════ */
   const stage = document.getElementById("stage");
   const slides = [...document.querySelectorAll(".slide")];
   const dots = document.getElementById("dots");
@@ -15,35 +15,33 @@
   const closeDrawerButton = document.getElementById("closeDrawer");
   const restartButton = document.getElementById("restart");
   const cursor = document.getElementById("cursor");
+  const loader = document.getElementById("loader");
+  const loaderBar = document.getElementById("loaderBar");
+  const loaderPercent = document.getElementById("loaderPercent");
 
-  /* STATE */
+  /* ═══════════ STATE ═══════════ */
   let currentIndex = 0;
   let isTransitioning = false;
   let wheelLocked = false;
   let touchStartX = 0;
   let touchStartY = 0;
   let touchStartTime = 0;
+  let touchMoved = false;
+  let touchStartTarget = null;
   let previousFocusedElement = null;
   let transitionTimer = null;
   let wheelTimer = null;
   let cursorEnabled = false;
 
-  /* CONSTANTS */
-  const TRANSITION_TIME = 760;
-  const WHEEL_LOCK_TIME = 900;
-  const SWIPE_THRESHOLD = 45;
-  const SWIPE_MAX_TIME = 850;
+  const TRANSITION_TIME = 900;
+  const WHEEL_LOCK_TIME = 950;
+  const SWIPE_THRESHOLD = 70;
+  const SWIPE_MAX_TIME = 900;
 
-  /* UTILS */
+  /* ═══════════ UTILS ═══════════ */
   const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
-
-  function toPersianNumber(value) {
-    return String(value).replace(/\d/g, d => persianDigits[d]);
-  }
-
-  function formatNumber(value, digits = 2) {
-    return toPersianNumber(String(value).padStart(digits, "0"));
-  }
+  const toPersianNumber = (v) => String(v).replace(/\d/g, d => persianDigits[d]);
+  const formatNumber = (v, d = 2) => toPersianNumber(String(v).padStart(d, "0"));
 
   function isTypingTarget(target) {
     if (!target) return false;
@@ -60,10 +58,79 @@
     return Boolean(target.closest("button, a, input, textarea, select, [contenteditable='true']"));
   }
 
-  /* ACCESSIBILITY */
+  /* ═══════════ LOADER ═══════════ */
+  function runLoader() {
+    return new Promise((resolve) => {
+      if (!loader) { resolve(); return; }
+
+      let current = 0;
+      let finished = false;
+      const startTime = Date.now();
+      const MIN_DURATION = 1800;
+      const MAX_DURATION = 5500;
+
+      function update(p) {
+        const v = Math.max(0, Math.min(100, Math.round(p)));
+        current = v;
+        if (loaderBar) loaderBar.style.width = v + "%";
+        if (loaderPercent) loaderPercent.textContent = toPersianNumber(v) + "٪";
+      }
+
+      function finish() {
+        if (finished) return;
+        finished = true;
+        update(100);
+
+        setTimeout(() => {
+          loader.classList.add("is-exit");
+
+          setTimeout(() => {
+            loader.classList.add("is-hidden");
+
+            setTimeout(() => {
+              loader.style.display = "none";
+              resolve();
+            }, 1250);
+          }, 550);
+        }, 350);
+      }
+
+      // نوار پیشرفت نرم با easing
+      function tick() {
+        if (finished) return;
+        const elapsed = Date.now() - startTime;
+        const t = Math.min(elapsed / 2400, 1);
+        const target = 92 * (1 - Math.pow(1 - t, 3));
+        if (target > current) update(target);
+
+        if (elapsed < MAX_DURATION - 500) {
+          requestAnimationFrame(tick);
+        }
+      }
+      requestAnimationFrame(tick);
+
+      // وقتی صفحه کامل لود شد، پایان بده
+      function pageReady() {
+        const elapsed = Date.now() - startTime;
+        const wait = Math.max(0, MIN_DURATION - elapsed);
+        setTimeout(finish, wait);
+      }
+
+      if (document.readyState === "complete") {
+        pageReady();
+      } else {
+        window.addEventListener("load", pageReady, { once: true });
+      }
+
+      // همیشه پایان - حتی اگر load event نیومد
+      setTimeout(finish, MAX_DURATION);
+    });
+  }
+
+  /* ═══════════ A11Y ═══════════ */
   function updateSlideAccessibility() {
-    slides.forEach((slide, index) => {
-      const active = index === currentIndex;
+    slides.forEach((slide, i) => {
+      const active = i === currentIndex;
       slide.setAttribute("aria-hidden", String(!active));
       if (active) slide.removeAttribute("inert");
       else slide.setAttribute("inert", "");
@@ -71,63 +138,64 @@
   }
 
   function updateMenuAccessibility() {
-    const isOpen = drawer?.classList.contains("open") ?? false;
+    const isOpen = drawer?.classList.contains("is-open") ?? false;
     menuButton?.setAttribute("aria-expanded", String(isOpen));
     drawer?.setAttribute("aria-hidden", String(!isOpen));
     drawerBackdrop?.setAttribute("aria-hidden", String(!isOpen));
   }
 
-  /* COUNTER */
+  /* ═══════════ COUNTER ═══════════ */
   function updateCounter() {
     if (!counter) return;
-    const current = formatNumber(currentIndex + 1);
-    const total = formatNumber(slides.length);
-    if (currentCounter && totalCounter) {
-      currentCounter.textContent = current;
-      totalCounter.textContent = total;
-      return;
+    const c = formatNumber(currentIndex + 1);
+    const t = formatNumber(slides.length);
+    const cur = counter.querySelector(".counter-current") || counter.querySelector(".current");
+    const tot = counter.querySelector(".counter-total") || counter.querySelector(".total");
+    if (cur && tot) {
+      cur.textContent = c;
+      tot.textContent = t;
+    } else {
+      counter.textContent = `${c} / ${t}`;
     }
-    counter.textContent = `${current} / ${total}`;
   }
 
-  /* DOTS */
+  /* ═══════════ DOTS ═══════════ */
   function createDots() {
     if (!dots) return;
     dots.innerHTML = "";
-    slides.forEach((slide, index) => {
+    slides.forEach((slide, i) => {
       const dot = document.createElement("button");
       dot.type = "button";
       dot.className = "dot";
-      if (index === currentIndex) dot.classList.add("active");
-      const title = slide.dataset.title || `صفحه ${index + 1}`;
+      if (i === currentIndex) dot.classList.add("is-active");
+      const title = slide.dataset.title || `صفحه ${i + 1}`;
       dot.setAttribute("aria-label", `رفتن به ${title}`);
-      dot.setAttribute("aria-current", index === currentIndex ? "true" : "false");
-      dot.addEventListener("click", () => goTo(index, { focus: false }));
+      dot.setAttribute("aria-current", i === currentIndex ? "true" : "false");
+      dot.addEventListener("click", () => goTo(i, { focus: false }));
       dots.appendChild(dot);
     });
   }
 
   function updateDots() {
     if (!dots) return;
-    const dotElements = [...dots.querySelectorAll(".dot")];
-    dotElements.forEach((dot, index) => {
-      const active = index === currentIndex;
-      dot.classList.toggle("active", active);
+    [...dots.querySelectorAll(".dot")].forEach((dot, i) => {
+      const active = i === currentIndex;
+      dot.classList.toggle("is-active", active);
       dot.setAttribute("aria-current", active ? "true" : "false");
     });
   }
 
-  /* DRAWER */
+  /* ═══════════ DRAWER ═══════════ */
   function createDrawerItems() {
     if (!drawerItems) return;
     drawerItems.innerHTML = "";
-    slides.forEach((slide, index) => {
+    slides.forEach((slide, i) => {
       const item = document.createElement("button");
       item.type = "button";
       item.className = "drawer-item";
-      if (index === currentIndex) item.classList.add("active");
-      const number = formatNumber(index + 1);
-      const title = slide.dataset.title || `صفحه ${index + 1}`;
+      if (i === currentIndex) item.classList.add("is-active");
+      const number = formatNumber(i + 1);
+      const title = slide.dataset.title || `صفحه ${i + 1}`;
       item.innerHTML = `
         <span class="drawer-item-number">${number}</span>
         <span class="drawer-item-title">${title}</span>
@@ -135,7 +203,7 @@
       `;
       item.setAttribute("aria-label", `رفتن به ${title}`);
       item.addEventListener("click", () => {
-        goTo(index, { focus: false });
+        goTo(i, { focus: false });
         closeDrawer();
       });
       drawerItems.appendChild(item);
@@ -144,28 +212,25 @@
 
   function updateDrawerItems() {
     if (!drawerItems) return;
-    const items = [...drawerItems.querySelectorAll(".drawer-item")];
-    items.forEach((item, index) => {
-      item.classList.toggle("active", index === currentIndex);
+    [...drawerItems.querySelectorAll(".drawer-item")].forEach((item, i) => {
+      item.classList.toggle("is-active", i === currentIndex);
     });
   }
 
   function openDrawer() {
-    if (!drawer) return;
-    if (drawer.classList.contains("open")) return;
+    if (!drawer || drawer.classList.contains("is-open")) return;
     previousFocusedElement = document.activeElement;
-    drawer.classList.add("open");
-    drawerBackdrop?.classList.add("open");
+    drawer.classList.add("is-open");
+    drawerBackdrop?.classList.add("is-open");
     document.body.classList.add("drawer-open");
     updateMenuAccessibility();
     requestAnimationFrame(() => closeDrawerButton?.focus());
   }
 
   function closeDrawer(restoreFocus = true) {
-    if (!drawer) return;
-    if (!drawer.classList.contains("open")) return;
-    drawer.classList.remove("open");
-    drawerBackdrop?.classList.remove("open");
+    if (!drawer || !drawer.classList.contains("is-open")) return;
+    drawer.classList.remove("is-open");
+    drawerBackdrop?.classList.remove("is-open");
     document.body.classList.remove("drawer-open");
     updateMenuAccessibility();
     if (restoreFocus) {
@@ -180,27 +245,27 @@
     }
   }
 
-  /* NAVIGATION */
-  function normalizeIndex(index) {
-    return Math.max(0, Math.min(slides.length - 1, index));
+  /* ═══════════ NAVIGATION ═══════════ */
+  function normalizeIndex(i) {
+    return Math.max(0, Math.min(slides.length - 1, i));
   }
 
   function goTo(index, options = {}) {
     if (!slides.length) return;
     const { force = false, focus = false } = options;
-    const targetIndex = normalizeIndex(index);
-    if (!force && (isTransitioning || targetIndex === currentIndex)) return;
+    const target = normalizeIndex(index);
+    if (!force && (isTransitioning || target === currentIndex)) return;
 
-    const previousIndex = currentIndex;
-    currentIndex = targetIndex;
+    const previous = currentIndex;
+    currentIndex = target;
     isTransitioning = true;
     window.clearTimeout(transitionTimer);
 
-    const direction = targetIndex > previousIndex ? "forward" : "backward";
-    stage?.setAttribute("data-direction", direction);
+    const dir = target > previous ? "forward" : "backward";
+    stage?.setAttribute("data-direction", dir);
 
     slides.forEach((slide, i) => {
-      slide.classList.toggle("active", i === currentIndex);
+      slide.classList.toggle("is-active", i === currentIndex);
     });
 
     updateCounter();
@@ -213,9 +278,7 @@
       activeSlide.classList.remove("just-entered");
       void activeSlide.offsetWidth;
       activeSlide.classList.add("just-entered");
-      window.setTimeout(() => {
-        activeSlide?.classList.remove("just-entered");
-      }, TRANSITION_TIME);
+      setTimeout(() => activeSlide?.classList.remove("just-entered"), TRANSITION_TIME);
     }
 
     if (focus) {
@@ -223,50 +286,43 @@
       catch { stage?.focus(); }
     }
 
-    transitionTimer = window.setTimeout(() => {
+    transitionTimer = setTimeout(() => {
       isTransitioning = false;
     }, TRANSITION_TIME);
   }
 
-  function nextSlide() {
+  const nextSlide = () => {
     if (isTransitioning || currentIndex >= slides.length - 1) return;
     goTo(currentIndex + 1);
-  }
+  };
 
-  function previousSlide() {
+  const previousSlide = () => {
     if (isTransitioning || currentIndex <= 0) return;
     goTo(currentIndex - 1);
-  }
+  };
 
-  function firstSlide() { goTo(0, { force: true }); }
-  function lastSlide() { goTo(slides.length - 1); }
+  const firstSlide = () => goTo(0, { force: true });
+  const lastSlide = () => goTo(slides.length - 1);
 
-  /* BUTTONS */
-  document.querySelectorAll("[data-next]").forEach(button => {
-    button.addEventListener("click", event => {
-      event.preventDefault();
-      nextSlide();
-    });
+  /* ═══════════ BUTTONS ═══════════ */
+  document.querySelectorAll("[data-next]").forEach(btn => {
+    btn.addEventListener("click", e => { e.preventDefault(); nextSlide(); });
   });
 
-  restartButton?.addEventListener("click", event => {
-    event.preventDefault();
-    firstSlide();
-  });
+  restartButton?.addEventListener("click", e => { e.preventDefault(); firstSlide(); });
 
-  /* KEYBOARD */
+  /* ═══════════ KEYBOARD ═══════════ */
   document.addEventListener("keydown", event => {
     const key = event.key.toLowerCase();
     if (isTypingTarget(event.target)) return;
 
-    if (key === "escape" && drawer?.classList.contains("open")) {
-      event.preventDefault();
-      closeDrawer();
-      return;
+    const drawerOpen = drawer?.classList.contains("is-open");
+
+    if (key === "escape" && drawerOpen) {
+      event.preventDefault(); closeDrawer(); return;
     }
 
     const interactive = isInteractiveTarget(event.target);
-    const drawerOpen = drawer?.classList.contains("open");
 
     if ((event.key === "ArrowRight" || event.key === "ArrowDown" || event.key === "PageDown") && !drawerOpen) {
       event.preventDefault(); nextSlide(); return;
@@ -285,59 +341,74 @@
     if (key === "f" && !interactive) { event.preventDefault(); toggleFullscreen(); return; }
     if (key === "m" && !interactive) {
       event.preventDefault();
-      if (drawer?.classList.contains("open")) closeDrawer();
+      if (drawerOpen) closeDrawer();
       else openDrawer();
     }
   });
 
-  /* WHEEL */
+  /* ═══════════ WHEEL ═══════════ */
   function handleWheel(event) {
-    if (drawer?.classList.contains("open")) return;
+    if (drawer?.classList.contains("is-open")) return;
     if (wheelLocked || isTransitioning) return;
     const delta = event.deltaY;
-    if (Math.abs(delta) < 18) return;
+    if (Math.abs(delta) < 20) return;
     wheelLocked = true;
     if (delta > 0) nextSlide();
     else previousSlide();
     window.clearTimeout(wheelTimer);
-    wheelTimer = window.setTimeout(() => { wheelLocked = false; }, WHEEL_LOCK_TIME);
+    wheelTimer = setTimeout(() => { wheelLocked = false; }, WHEEL_LOCK_TIME);
   }
   window.addEventListener("wheel", handleWheel, { passive: true });
 
-  /* TOUCH */
+  /* ═══════════ TOUCH ═══════════ */
   window.addEventListener("touchstart", event => {
     if (!event.touches.length) return;
-    const touch = event.touches[0];
-    touchStartX = touch.clientX;
-    touchStartY = touch.clientY;
+    const t = event.touches[0];
+    touchStartX = t.clientX;
+    touchStartY = t.clientY;
     touchStartTime = Date.now();
+    touchMoved = false;
+    touchStartTarget = event.target;
+  }, { passive: true });
+
+  window.addEventListener("touchmove", event => {
+    if (!event.touches.length) return;
+    const t = event.touches[0];
+    const dx = Math.abs(t.clientX - touchStartX);
+    const dy = Math.abs(t.clientY - touchStartY);
+    if (dx > 10 || dy > 10) touchMoved = true;
   }, { passive: true });
 
   window.addEventListener("touchend", event => {
     if (!event.changedTouches.length) return;
-    if (drawer?.classList.contains("open")) return;
+    if (drawer?.classList.contains("is-open")) return;
     if (isTransitioning) return;
+    if (!touchMoved) return;
 
-    const touch = event.changedTouches[0];
-    const deltaX = touch.clientX - touchStartX;
-    const deltaY = touch.clientY - touchStartY;
+    if (touchStartTarget && touchStartTarget.closest(
+      "button, a, input, textarea, select, [contenteditable='true'], .drawer, .drawer-item, .cta, .menu-btn, .dot"
+    )) return;
+
+    const t = event.changedTouches[0];
+    const dx = t.clientX - touchStartX;
+    const dy = t.clientY - touchStartY;
     const elapsed = Date.now() - touchStartTime;
     if (elapsed > SWIPE_MAX_TIME) return;
 
-    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > SWIPE_THRESHOLD) {
-      if (deltaX < 0) nextSlide();
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > SWIPE_THRESHOLD) {
+      if (dx < 0) nextSlide();
       else previousSlide();
       return;
     }
-    if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > SWIPE_THRESHOLD) {
-      if (deltaY < 0) nextSlide();
+    if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > SWIPE_THRESHOLD) {
+      if (dy < 0) nextSlide();
       else previousSlide();
     }
   }, { passive: true });
 
-  /* DRAWER EVENTS */
+  /* ═══════════ DRAWER EVENTS ═══════════ */
   menuButton?.addEventListener("click", () => {
-    if (drawer?.classList.contains("open")) closeDrawer();
+    if (drawer?.classList.contains("is-open")) closeDrawer();
     else openDrawer();
   });
 
@@ -345,75 +416,53 @@
   drawerBackdrop?.addEventListener("click", () => closeDrawer());
 
   document.addEventListener("click", event => {
-    if (!drawer?.classList.contains("open")) return;
-    if (drawer.contains(event.target) || menuButton?.contains(event.target) || drawerBackdrop?.contains(event.target)) return;
+    if (!drawer?.classList.contains("is-open")) return;
+    if (drawer.contains(event.target) ||
+        menuButton?.contains(event.target) ||
+        drawerBackdrop?.contains(event.target)) return;
     closeDrawer();
   });
 
-  /* FULLSCREEN */
+  /* ═══════════ FULLSCREEN ═══════════ */
   async function toggleFullscreen() {
     try {
       if (!document.fullscreenElement) await document.documentElement.requestFullscreen?.();
       else await document.exitFullscreen?.();
-    } catch (error) {
-      console.warn("Fullscreen unavailable:", error);
+    } catch (e) {
+      console.warn("Fullscreen unavailable:", e);
     }
   }
 
-  /* CURSOR */
+  /* ═══════════ CURSOR ═══════════ */
   function initCursor() {
     if (!cursor) return;
-    const finePointer = window.matchMedia("(pointer: fine)");
-    if (!finePointer.matches) {
-      cursor.style.display = "none";
-      return;
-    }
+    const fine = window.matchMedia("(pointer: fine)");
+    if (!fine.matches) { cursor.style.display = "none"; return; }
     cursorEnabled = true;
     document.body.classList.add("custom-cursor");
 
-    window.addEventListener("mousemove", event => {
-      cursor.style.left = `${event.clientX}px`;
-      cursor.style.top = `${event.clientY}px`;
-      cursor.classList.add("visible");
+    window.addEventListener("mousemove", e => {
+      cursor.style.left = `${e.clientX}px`;
+      cursor.style.top = `${e.clientY}px`;
+      cursor.classList.add("is-visible");
     }, { passive: true });
 
-    window.addEventListener("mouseleave", () => cursor.classList.remove("visible"));
-    window.addEventListener("mouseenter", () => cursor.classList.add("visible"));
+    window.addEventListener("mouseleave", () => cursor.classList.remove("is-visible"));
+    window.addEventListener("mouseenter", () => cursor.classList.add("is-visible"));
 
-    document.addEventListener("mouseover", event => {
-      if (event.target.closest("button, a, .drawer-item, .art, .start")) cursor.classList.add("hover");
+    document.addEventListener("mouseover", e => {
+      if (e.target.closest("button, a, .drawer-item, .media, .cta, .tile")) {
+        cursor.classList.add("is-hover");
+      }
     });
-    document.addEventListener("mouseout", event => {
-      if (event.target.closest("button, a, .drawer-item, .art, .start")) cursor.classList.remove("hover");
+    document.addEventListener("mouseout", e => {
+      if (e.target.closest("button, a, .drawer-item, .media, .cta, .tile")) {
+        cursor.classList.remove("is-hover");
+      }
     });
   }
 
-  /* PARALLAX */
-  function initParallax() {
-    if (!window.matchMedia("(pointer: fine)").matches) return;
-    let raf = null;
-    let mouseX = 0;
-    let mouseY = 0;
-
-    window.addEventListener("mousemove", event => {
-      mouseX = (event.clientX / window.innerWidth - 0.5) * 2;
-      mouseY = (event.clientY / window.innerHeight - 0.5) * 2;
-      if (raf) return;
-      raf = requestAnimationFrame(() => {
-        const activeSlide = slides[currentIndex];
-        if (activeSlide) {
-          const art = activeSlide.querySelector(".hero-art, .art, .end-orbit");
-          if (art) {
-            const amount = activeSlide.classList.contains("hero") ? 7 : 4;
-            art.style.transform = `translate3d(${mouseX * amount}px, ${mouseY * amount}px, 0)`;
-          }
-        }
-        raf = null;
-      });
-    }, { passive: true });
-  }
-
-  /* VISIBILITY */
+  /* ═══════════ VISIBILITY ═══════════ */
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) {
       isTransitioning = false;
@@ -423,44 +472,53 @@
     }
   });
 
-  /* RESIZE */
+  /* ═══════════ RESIZE ═══════════ */
   let resizeTimer = null;
   window.addEventListener("resize", () => {
     window.clearTimeout(resizeTimer);
-    resizeTimer = window.setTimeout(() => {
-      if (cursorEnabled && !window.matchMedia("(pointer: fine)").matches) cursor.style.display = "none";
-      else if (cursorEnabled) cursor.style.display = "";
+    resizeTimer = setTimeout(() => {
+      if (cursorEnabled && !window.matchMedia("(pointer: fine)").matches) {
+        cursor.style.display = "none";
+      } else if (cursorEnabled) {
+        cursor.style.display = "";
+      }
     }, 150);
   }, { passive: true });
 
-  /* REDUCED MOTION */
+  /* ═══════════ REDUCED MOTION ═══════════ */
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-
   function handleReducedMotion() {
-    if (reducedMotion.matches) document.body.classList.add("reduce-motion");
-    else document.body.classList.remove("reduce-motion");
+    document.body.classList.toggle("reduce-motion", reducedMotion.matches);
   }
   reducedMotion.addEventListener?.("change", handleReducedMotion);
 
-  /* INIT */
-  function init() {
+  /* ═══════════ INIT ═══════════ */
+  async function init() {
     if (!slides.length) {
       console.warn("Pirayeh Kherad: no slides found.");
       return;
     }
+
     if (stage) stage.setAttribute("tabindex", "-1");
-    slides.forEach((slide, index) => slide.classList.toggle("active", index === 0));
+    slides.forEach((slide, i) => slide.classList.toggle("is-active", i === 0));
     currentIndex = 0;
+
     createDots();
     createDrawerItems();
     updateCounter();
     updateSlideAccessibility();
     updateMenuAccessibility();
+
     initCursor();
-    initParallax();
     handleReducedMotion();
+
+    await runLoader();
+
     document.body.classList.add("app-ready");
-    requestAnimationFrame(() => slides[0]?.classList.add("just-entered"));
+
+    requestAnimationFrame(() => {
+      slides[0]?.classList.add("just-entered");
+    });
   }
 
   if (document.readyState === "loading") {
