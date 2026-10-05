@@ -41,7 +41,7 @@
     );
   }
 
-  /* ═══════════ LOADER — همیشه تمام می‌شود ═══════════ */
+  /* ═══════════ LOADER ═══════════ */
   function runLoader() {
     return new Promise((resolve) => {
       if (!loader) { resolve(); return; }
@@ -80,7 +80,6 @@
         window.addEventListener("load", pageReady, { once: true });
       }
 
-      // فورس فینیش حتی اگر load نیومد
       fallbackTimer = setTimeout(finish, MAX_DURATION);
     });
   }
@@ -235,7 +234,6 @@
   nextBtn?.addEventListener("click", nextSlide);
   restartBtn?.addEventListener("click", firstSlide);
 
-  // دکمه‌های داخل اسلاید (اگر وجود داشته باشن)
   document.querySelectorAll("[data-next]").forEach(btn => {
     btn.addEventListener("click", e => { e.preventDefault(); nextSlide(); });
   });
@@ -275,11 +273,8 @@
   });
 
   /* ═══════════════════════════════════════════════════════
-     ❌ WHEEL — کامل حذف شد
-     دیگر چرخ ماوس / اسکرول صفحه را عوض نمی‌کند
+     TOUCH — فقط سوایپ افقی، عمودی کاملاً حذف شد
      ═══════════════════════════════════════════════════════ */
-
-  /* ═══════════ TOUCH — فقط swipe بسیار واضح ═══════════ */
   let touchStartX = 0;
   let touchStartY = 0;
   let touchStartTime = 0;
@@ -311,7 +306,7 @@
     if (!touchMoved) return;
 
     if (touchStartTarget && touchStartTarget.closest(
-      "button, a, input, textarea, select, [contenteditable='true'], .drawer, .drawer-item, .nav-controls, .nav-btn, .menu-btn, .cta"
+      "button, a, input, textarea, select, [contenteditable='true'], .drawer, .drawer-item, .nav-controls, .nav-btn, .menu-btn, .cta, .nav"
     )) return;
 
     const t = event.changedTouches[0];
@@ -320,16 +315,21 @@
     const elapsed = Date.now() - touchStartTime;
     if (elapsed > 800) return;
 
-    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 90) {
+    /* ─────────────────────────────────────────────
+       فقط سوایپ افقی
+       شرط: حرکت افقی باید حداقل ۱.۵ برابر عمودی باشد
+       و از ۹۰ پیکسل بیشتر باشد
+       ───────────────────────────────────────────── */
+    const isHorizontal =
+      Math.abs(dx) > Math.abs(dy) * 1.5 &&
+      Math.abs(dx) > 90;
+
+    if (isHorizontal) {
       if (dx < 0) nextSlide();
       else previousSlide();
-      return;
     }
 
-    if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 110) {
-      if (dy < 0) nextSlide();
-      else previousSlide();
-    }
+    /* سوایپ عمودی کاملاً غیرفعال است */
   }, { passive: true });
 
   /* ═══════════ DRAWER EVENTS ═══════════ */
