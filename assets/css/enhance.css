@@ -1,0 +1,792 @@
+/* ═══════════════════════════════════════════════════════
+   PIRAYEH KHERAD — Cinematic Enhancement Layer
+   فقط زیبایی — چیدمان دست نخورده
+   این فایل را پس از style.css لینک کنید
+   ═══════════════════════════════════════════════════════ */
+
+
+/* ═══════════════════════════════════════════════════════
+   01. RE-ENABLE RICH ATMOSPHERE
+   ═══════════════════════════════════════════════════════ */
+
+/* بافت کاغذ کهنه */
+.bg-grain{
+  opacity:.06 !important;
+  mix-blend-mode:soft-light !important;
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='5' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .95  0 0 0 0 .9  0 0 0 0 .75  0 0 0 .5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>") !important;
+}
+
+/* درخشش محیطی غنی‌تر */
+.bg-glow{
+  opacity:.75 !important;
+  filter:blur(140px) !important;
+}
+
+.bg-glow-1{
+  background:
+    radial-gradient(circle at 20% 25%, rgba(212,177,119,.28), transparent 55%),
+    radial-gradient(circle at 60% 15%, rgba(180,140,80,.16), transparent 50%) !important;
+}
+
+.bg-glow-2{
+  background:
+    radial-gradient(circle at 80% 78%, rgba(60,90,84,.35), transparent 60%),
+    radial-gradient(circle at 15% 85%, rgba(212,177,119,.14), transparent 55%) !important;
+}
+
+/* وینیت سینمایی نرم‌تر */
+.bg-vignette{
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 45%, transparent 30%, rgba(0,0,0,.35) 70%, rgba(0,0,0,.85) 100%) !important;
+}
+
+/* قاب ثابت — گوشه‌ها با درخشش بیشتر */
+.bg-frame::before,
+.bg-frame::after{
+  width:44px !important;
+  height:44px !important;
+  border-color:rgba(212,177,119,.55) !important;
+  filter:drop-shadow(0 0 8px rgba(212,177,119,.35));
+}
+
+/* ═══════════════════════════════════════════════════════
+   02. AMBIENT PARTICLES (dust motes)
+   ═══════════════════════════════════════════════════════ */
+
+#stage::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  opacity:.35;
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 20%, rgba(212,177,119,.7), transparent 60%),
+    radial-gradient(1px 1px at 28% 68%, rgba(212,177,119,.5), transparent 60%),
+    radial-gradient(1.5px 1.5px at 68% 32%, rgba(212,177,119,.6), transparent 60%),
+    radial-gradient(1px 1px at 82% 78%, rgba(212,177,119,.45), transparent 60%),
+    radial-gradient(1.2px 1.2px at 45% 15%, rgba(212,177,119,.5), transparent 60%),
+    radial-gradient(1px 1px at 92% 55%, rgba(212,177,119,.4), transparent 60%),
+    radial-gradient(1.5px 1.5px at 8% 88%, rgba(212,177,119,.55), transparent 60%),
+    radial-gradient(1px 1px at 55% 95%, rgba(212,177,119,.4), transparent 60%);
+  animation:dustFloat 24s ease-in-out infinite;
+}
+
+@keyframes dustFloat{
+  0%,100%{transform:translate3d(0,0,0)}
+  33%{transform:translate3d(-3px,-8px,0)}
+  66%{transform:translate3d(4px,-14px,0)}
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   03. TOPBAR — refinement
+   ═══════════════════════════════════════════════════════ */
+
+.topbar{
+  border-bottom:1px solid transparent;
+  background:
+    linear-gradient(180deg, rgba(5,4,3,.96) 0%, rgba(5,4,3,.6) 45%, transparent 100%),
+    linear-gradient(90deg, transparent 0%, rgba(212,177,119,.04) 50%, transparent 100%);
+}
+
+.topbar::after{
+  content:"";
+  position:absolute;
+  bottom:0;
+  left:10%;
+  right:10%;
+  height:1px;
+  background:linear-gradient(90deg, transparent, var(--gold-line), transparent);
+  opacity:.5;
+}
+
+.brand-mark{
+  transition:transform .6s var(--ease), box-shadow .6s var(--ease);
+}
+
+.brand:hover .brand-mark{
+  transform:rotate(90deg) scale(1.08);
+  box-shadow:
+    0 0 0 6px rgba(212,177,119,.08),
+    0 0 45px rgba(212,177,119,.4);
+}
+
+.brand-name{
+  position:relative;
+  background:linear-gradient(180deg, var(--paper) 0%, var(--paper-soft) 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.menu-btn{
+  position:relative;
+  overflow:hidden;
+}
+
+.menu-btn::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at center, rgba(212,177,119,.25), transparent 70%);
+  opacity:0;
+  transition:opacity .4s var(--ease);
+}
+
+.menu-btn:hover::before{opacity:1}
+
+.menu-btn svg,
+.menu-btn span{position:relative;z-index:1}
+
+
+/* ═══════════════════════════════════════════════════════
+   04. SLIDE — ambient depth layers
+   ═══════════════════════════════════════════════════════ */
+
+.slide::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity 1.5s var(--ease-out);
+}
+
+.slide.is-active::before{opacity:1}
+
+/* نور کهربایی از گوشه */
+.slide-hero::before,
+.slide-analysis::before,
+.slide-message::before,
+.slide-end::before{
+  background:
+    radial-gradient(ellipse 70% 50% at 75% 15%, rgba(212,177,119,.10), transparent 55%),
+    radial-gradient(ellipse 60% 50% at 20% 85%, rgba(60,90,84,.08), transparent 55%);
+}
+
+/* نور سبز آبی برای صحنه‌های آب */
+.slide-chapter:not(.slide-chapter-rev)::before{
+  background:
+    radial-gradient(ellipse 65% 45% at 25% 30%, rgba(60,90,84,.15), transparent 55%),
+    radial-gradient(ellipse 60% 50% at 80% 85%, rgba(20,30,28,.18), transparent 55%);
+}
+
+/* نور تیره برای صحنه‌های خاص */
+.slide-chapter-rev::before{
+  background:
+    radial-gradient(ellipse 60% 45% at 75% 25%, rgba(212,177,119,.08), transparent 55%),
+    radial-gradient(ellipse 60% 50% at 25% 80%, rgba(50,25,18,.15), transparent 55%);
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   05. TYPOGRAPHY ENHANCEMENT
+   ═══════════════════════════════════════════════════════ */
+
+/* Kicker با درخشش */
+.kicker{
+  position:relative;
+  text-shadow:0 0 20px rgba(212,177,119,.35);
+}
+
+/* تیترهای طلایی — درخشش نرم */
+.hero-title-l2,
+.chapter-title-l2,
+.analysis-title .chapter-title-l2,
+.message-title .chapter-title-l2,
+.end-title .chapter-title-l2{
+  text-shadow:
+    0 0 40px rgba(212,177,119,.45),
+    0 0 80px rgba(212,177,119,.25),
+    0 20px 40px rgba(0,0,0,.4);
+}
+
+/* زیرخط تزئینی زیر تیترها */
+.hero-title,
+.chapter-title,
+.analysis-title,
+.message-title,
+.end-title{
+  position:relative;
+}
+
+/* اُرنمنت وسط — با درخشش */
+.ornament-diamond{
+  text-shadow:0 0 12px rgba(212,177,119,.7);
+}
+
+/* قانون — نوار طلایی نورانی */
+.rule{
+  box-shadow:0 0 14px rgba(212,177,119,.35);
+}
+
+.rule::after{
+  content:"";
+  position:absolute;
+  inset:-2px 0;
+  background:linear-gradient(90deg, var(--gold), transparent);
+  filter:blur(6px);
+  opacity:.4;
+  pointer-events:none;
+}
+
+/* پاراگراف‌ها */
+.chapter-text > p,
+.hero-lead,
+.analysis-lead,
+.message-text,
+.end-text{
+  text-shadow:0 2px 8px rgba(0,0,0,.3);
+}
+
+/* نقل قول — قاب نورانی */
+.quote{
+  position:relative;
+  box-shadow:
+    inset 0 0 30px rgba(212,177,119,.05),
+    0 0 30px rgba(212,177,119,.06);
+}
+
+.quote::before{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  border-radius:inherit;
+  background:linear-gradient(90deg, transparent, rgba(212,177,119,.15), transparent);
+  z-index:-1;
+  filter:blur(8px);
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   06. IMAGE FRAMES — سینمایی‌تر
+   ═══════════════════════════════════════════════════════ */
+
+/* فریم تصویر Hero */
+.hero-visual-frame{
+  position:relative;
+  box-shadow:
+    inset 0 0 100px rgba(0,0,0,.6),
+    inset 0 0 0 1px rgba(212,177,119,.4),
+    0 40px 110px rgba(0,0,0,.6),
+    0 0 100px rgba(212,177,119,.2),
+    0 0 200px rgba(212,177,119,.08) !important;
+}
+
+/* درخشش روی تصویر Hero */
+.hero-visual::after{
+  content:"";
+  position:absolute;
+  inset:-12%;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(212,177,119,.2), transparent 65%);
+  filter:blur(50px);
+  pointer-events:none;
+  z-index:-1;
+  animation:glowBreathe 9s ease-in-out infinite;
+}
+
+@keyframes glowBreathe{
+  0%,100%{transform:scale(.9);opacity:.5}
+  50%{transform:scale(1.12);opacity:.95}
+}
+
+/* فریم تصویر فصل — با گوشه‌های تزئینی */
+.chapter-media-frame{
+  position:relative;
+  box-shadow:
+    inset 0 0 80px rgba(0,0,0,.55),
+    0 30px 80px rgba(0,0,0,.55),
+    0 0 60px rgba(212,177,119,.12),
+    0 0 0 1px rgba(212,177,119,.18) !important;
+}
+
+/* گوشه‌های طلایی */
+.chapter-media-frame::before,
+.chapter-media-frame::after{
+  content:"";
+  position:absolute;
+  width:22px;
+  height:22px;
+  z-index:5;
+  border-color:var(--gold);
+  border-style:solid;
+  border-width:0;
+  opacity:.85;
+  filter:drop-shadow(0 0 6px rgba(212,177,119,.5));
+}
+
+.chapter-media-frame::before{
+  top:12px;right:12px;
+  border-top-width:1.5px;
+  border-right-width:1.5px;
+}
+
+.chapter-media-frame::after{
+  bottom:12px;left:12px;
+  border-bottom-width:1.5px;
+  border-left-width:1.5px;
+}
+
+/* درخشش دوره‌ای روی تصویر فصل */
+.chapter-media{
+  position:relative;
+}
+
+.chapter-media::after{
+  content:"";
+  position:absolute;
+  inset:-8% 0;
+  background:radial-gradient(ellipse at center, rgba(212,177,119,.14), transparent 65%);
+  filter:blur(40px);
+  pointer-events:none;
+  z-index:-1;
+  animation:glowBreathe 11s ease-in-out infinite;
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   07. SEAL — مُهر طلایی زنده
+   ═══════════════════════════════════════════════════════ */
+
+.seal{
+  position:relative;
+  transition:all .5s var(--ease);
+}
+
+.seal::after{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  border-radius:inherit;
+  background:linear-gradient(135deg, rgba(212,177,119,.15), transparent 40%, transparent 60%, rgba(212,177,119,.1));
+  z-index:-1;
+  filter:blur(8px);
+  opacity:.6;
+}
+
+.seal-mark{
+  position:relative;
+  transition:transform .6s var(--ease);
+}
+
+.seal-mark::after{
+  content:"";
+  position:absolute;
+  inset:-4px;
+  border-radius:50%;
+  border:1px dashed rgba(212,177,119,.35);
+  animation:ringSpin 25s linear infinite;
+  pointer-events:none;
+}
+
+@keyframes ringSpin{to{transform:rotate(360deg)}}
+
+.seal:hover .seal-mark{
+  transform:scale(1.08);
+}
+
+.seal:hover .seal-mark::after{
+  border-color:var(--gold);
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   08. TILES (Analysis) — عمق و درخشش
+   ═══════════════════════════════════════════════════════ */
+
+.tile{
+  position:relative;
+  overflow:hidden;
+}
+
+/* درخشش عبوری هنگام hover */
+.tile::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(115deg,
+    transparent 30%,
+    rgba(255,255,255,.06) 45%,
+    rgba(255,255,255,.14) 50%,
+    rgba(255,255,255,.06) 55%,
+    transparent 70%);
+  transform:translateX(-120%);
+  transition:transform 1s var(--ease);
+  pointer-events:none;
+}
+
+.tile:hover::before{
+  transform:translateX(120%);
+}
+
+/* هاله‌ی نوری زیر کارت */
+.tile::after{
+  content:"";
+  position:absolute;
+  left:20%;
+  right:20%;
+  bottom:-30px;
+  height:40px;
+  background:radial-gradient(ellipse, rgba(212,177,119,.25), transparent 70%);
+  filter:blur(20px);
+  opacity:0;
+  transition:opacity .5s var(--ease);
+  pointer-events:none;
+}
+
+.tile:hover::after{opacity:1}
+
+/* عدد داخل کارت با درخشش */
+.tile-num{
+  text-shadow:0 0 20px rgba(212,177,119,.4);
+  transition:transform .5s var(--ease);
+}
+
+.tile:hover .tile-num{
+  transform:scale(1.1) rotate(-3deg);
+}
+
+.tile-tag{
+  position:relative;
+  padding-right:16px;
+}
+
+.tile-tag::before{
+  content:"";
+  position:absolute;
+  right:0;
+  top:50%;
+  width:8px;
+  height:1px;
+  background:var(--gold-deep);
+  transform:translateY(-50%);
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   09. MESSAGE & END — شکوه
+   ═══════════════════════════════════════════════════════ */
+
+/* نشان پیام — تپش و حلقه‌های چرخان */
+.message-emblem,
+.end-emblem{
+  position:relative;
+  animation:emblemPulse 5s ease-in-out infinite;
+}
+
+.message-emblem::before,
+.end-emblem::before{
+  content:"";
+  position:absolute;
+  inset:-14%;
+  border-radius:50%;
+  border:1px solid rgba(212,177,119,.15);
+  animation:ringSpin 40s linear infinite;
+  pointer-events:none;
+}
+
+.message-emblem::after,
+.end-emblem::after{
+  content:"";
+  position:absolute;
+  inset:-26%;
+  border-radius:50%;
+  border:1px dashed rgba(212,177,119,.10);
+  animation:ringSpin 60s linear infinite reverse;
+  pointer-events:none;
+}
+
+@keyframes emblemPulse{
+  0%,100%{
+    box-shadow:
+      0 0 40px rgba(212,177,119,.15),
+      inset 0 0 30px rgba(212,177,119,.08);
+  }
+  50%{
+    box-shadow:
+      0 0 70px rgba(212,177,119,.3),
+      inset 0 0 45px rgba(212,177,119,.15);
+  }
+}
+
+/* درخشش زیر متن پیام و پایان */
+.message-text,
+.end-text{
+  position:relative;
+}
+
+.message-text::before,
+.end-text::before{
+  content:"";
+  position:absolute;
+  inset:-20px -10%;
+  background:radial-gradient(ellipse at center, rgba(212,177,119,.05), transparent 65%);
+  z-index:-1;
+  pointer-events:none;
+  filter:blur(20px);
+}
+
+/* امضاها — با نور زیرشان */
+.message-sign,
+.end-sign{
+  position:relative;
+  padding:0 44px;
+}
+
+.message-sign::before,
+.message-sign::after,
+.end-sign::before,
+.end-sign::after{
+  content:"";
+  position:absolute;
+  top:50%;
+  width:32px;
+  height:1px;
+  background:linear-gradient(90deg, transparent, var(--gold-deep), transparent);
+}
+
+.message-sign::before,
+.end-sign::before{right:0}
+
+.message-sign::after,
+.end-sign::after{left:0}
+
+/* ═══════════════════════════════════════════════════════
+   10. NAV — دکمه‌های زنده
+   ═══════════════════════════════════════════════════════ */
+
+.nav{
+  border-color:rgba(212,177,119,.14) !important;
+  box-shadow:
+    0 16px 45px rgba(0,0,0,.6),
+    0 0 0 1px rgba(212,177,119,.06),
+    inset 0 1px 0 rgba(255,255,255,.04) !important;
+}
+
+.nav-btn{
+  position:relative;
+  overflow:hidden;
+}
+
+.nav-btn::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  background:radial-gradient(circle at center, rgba(212,177,119,.25), transparent 70%);
+  opacity:0;
+  transform:scale(.5);
+  transition:opacity .35s var(--ease),transform .35s var(--ease);
+  pointer-events:none;
+}
+
+.nav-btn:hover::before{
+  opacity:1;
+  transform:scale(1);
+}
+
+.nav-btn svg{position:relative;z-index:1}
+
+.nav-fill{
+  box-shadow:
+    0 0 12px rgba(212,177,119,.8),
+    0 0 24px rgba(212,177,119,.4) !important;
+}
+
+.nav-now{
+  text-shadow:0 0 14px rgba(212,177,119,.5);
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   11. DRAWER — زیبایی بیشتر
+   ═══════════════════════════════════════════════════════ */
+
+.drawer::before{
+  content:"";
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:0;
+  width:1px;
+  background:linear-gradient(180deg, transparent, var(--gold-line) 30%, var(--gold-line) 70%, transparent);
+  opacity:.6;
+}
+
+.drawer-item{
+  position:relative;
+}
+
+.drawer-item::before{
+  content:"";
+  position:absolute;
+  top:50%;
+  right:0;
+  width:2px;
+  height:0;
+  background:linear-gradient(180deg, transparent, var(--gold), transparent);
+  transform:translateY(-50%);
+  transition:height .4s var(--ease);
+}
+
+.drawer-item:hover::before,
+.drawer-item.is-active::before{
+  height:60%;
+}
+
+.drawer-item-number{
+  transition:all .4s var(--ease);
+}
+
+.drawer-item:hover .drawer-item-number{
+  transform:rotate(-8deg) scale(1.05);
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   12. LOADER — شکوه بیشتر
+   ═══════════════════════════════════════════════════════ */
+
+.loader-inner::before{
+  content:"";
+  position:absolute;
+  inset:-30%;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(212,177,119,.2), transparent 60%);
+  filter:blur(50px);
+  z-index:-1;
+  animation:glowBreathe 4s ease-in-out infinite;
+}
+
+.loader-num{
+  text-shadow:
+    0 0 40px rgba(212,177,119,.6),
+    0 0 80px rgba(212,177,119,.3) !important;
+}
+
+.loader-ring{
+  box-shadow:0 0 30px rgba(212,177,119,.15);
+}
+
+.loader-wordmark{
+  text-shadow:0 0 20px rgba(212,177,119,.4);
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   13. LINK/CTA — button glow enhancement
+   ═══════════════════════════════════════════════════════ */
+
+.kicker{
+  animation:kickerFade 3s ease-in-out infinite;
+}
+
+@keyframes kickerFade{
+  0%,100%{opacity:.9}
+  50%{opacity:1}
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   14. CURSOR — اضافه کردن trail نرم
+   ═══════════════════════════════════════════════════════ */
+
+.cursor{
+  box-shadow:0 0 15px rgba(212,177,119,.4);
+}
+
+.cursor.is-hover{
+  box-shadow:0 0 30px rgba(212,177,119,.7);
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   15. SLIDE TRANSITION — سینمایی‌تر
+   ═══════════════════════════════════════════════════════ */
+
+.slide.is-active .container{
+  animation:containerIn 1.4s var(--ease-out);
+}
+
+@keyframes containerIn{
+  0%{filter:blur(4px)}
+  100%{filter:blur(0)}
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   16. MOTION SAFETY
+   ═══════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion:reduce){
+  #stage::before,
+  .hero-visual::after,
+  .chapter-media::after,
+  .message-emblem,
+  .end-emblem,
+  .message-emblem::before,
+  .message-emblem::after,
+  .end-emblem::before,
+  .end-emblem::after,
+  .seal-mark::after,
+  .loader-inner::before{
+    animation:none !important;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   17. MOBILE TWEAKS
+   ═══════════════════════════════════════════════════════ */
+
+@media (max-width:640px){
+  .bg-glow{
+    filter:blur(90px) !important;
+    opacity:.65 !important;
+  }
+
+  #stage::before{
+    opacity:.25;
+  }
+
+  .chapter-media-frame::before,
+  .chapter-media-frame::after{
+    width:16px;
+    height:16px;
+    top:9px;
+    right:9px;
+  }
+
+  .chapter-media-frame::after{
+    bottom:9px;
+    left:9px;
+    top:auto;
+    right:auto;
+  }
+
+  .tile::after{
+    display:none;
+  }
+
+  .message-sign,
+  .end-sign{
+    padding:0 32px;
+  }
+
+  .message-sign::before,
+  .message-sign::after,
+  .end-sign::before,
+  .end-sign::after{
+    width:20px;
+  }
+}
+
+@media (max-width:380px){
+  .tile::before{
+    display:none;
+  }
+}
