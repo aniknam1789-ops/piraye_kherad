@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5">
 <meta name="theme-color" content="#050403">
 <meta name="color-scheme" content="dark">
-<meta name="description" content="پیرایه خرد — حکایتی الهام‌گرفته از کلیله و دمنه درباره‌ی دوراندیشی، چاره‌گری و غفلت.">
+<meta name="description" content="پیرایه خرد — حکایتی از کلیله و دمنه">
 <title>پیرایه خرد — حکایتی از کلیله و دمنه</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,72 +14,57 @@
 </head>
 <body>
 
-<!-- ══════════════════ LOADER ══════════════════ -->
+<!-- ══════════════════ LOADER — FILM LEADER ══════════════════ -->
 <div class="loader" id="loader" aria-hidden="true">
-  <div class="loader-bg" aria-hidden="true">
-    <span class="loader-orb loader-orb-1"></span>
-    <span class="loader-orb loader-orb-2"></span>
-    <span class="loader-orb loader-orb-3"></span>
+
+  <div class="loader-grain" aria-hidden="true"></div>
+  <div class="loader-scratch loader-scratch-a" aria-hidden="true"></div>
+  <div class="loader-scratch loader-scratch-b" aria-hidden="true"></div>
+  <div class="loader-scratch loader-scratch-c" aria-hidden="true"></div>
+
+  <div class="loader-cross" aria-hidden="true">
+    <span class="loader-cross-h"></span>
+    <span class="loader-cross-v"></span>
   </div>
 
-  <div class="loader-stage">
+  <div class="loader-reel" aria-hidden="true">
+    <span class="loader-reel-ring"></span>
+    <span class="loader-reel-ring loader-reel-ring-2"></span>
+    <span class="loader-reel-ring loader-reel-ring-3"></span>
 
-    <div class="loader-emblem">
-      <svg viewBox="0 0 200 200" class="loader-emblem-svg" aria-hidden="true">
-        <circle cx="100" cy="100" r="92" fill="none" stroke="url(#goldGrad)" stroke-width="0.6"/>
-        <circle cx="100" cy="100" r="76" fill="none" stroke="url(#goldGrad)" stroke-width="0.4" stroke-dasharray="2 4"/>
-        <circle cx="100" cy="100" r="60" fill="none" stroke="url(#goldGrad)" stroke-width="0.3" opacity="0.5"/>
-        <defs>
-          <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#8a6d3a" stop-opacity="0.2"/>
-            <stop offset="50%" stop-color="#f2dca6" stop-opacity="0.9"/>
-            <stop offset="100%" stop-color="#8a6d3a" stop-opacity="0.2"/>
-          </linearGradient>
-        </defs>
-      </svg>
-      <span class="loader-emblem-glyph">❈</span>
-      <span class="loader-emblem-glow"></span>
-    </div>
+    <span class="loader-num" style="--d:0.00s">۵</span>
+    <span class="loader-num" style="--d:1.00s">۴</span>
+    <span class="loader-num" style="--d:2.00s">۳</span>
+    <span class="loader-num" style="--d:3.00s">۲</span>
+    <span class="loader-num" style="--d:4.00s">۱</span>
 
-    <h1 class="loader-wordmark">
-      <span class="loader-word">پیرایه</span>
-      <span class="loader-word loader-word-accent">خرد</span>
-    </h1>
-
-    <div class="loader-rule">
-      <span class="loader-rule-line"></span>
-      <span class="loader-rule-diamond">◆</span>
-      <span class="loader-rule-line"></span>
-    </div>
-
-    <p class="loader-tagline">حکایتی از کلیله و دمنه</p>
-
-    <div class="loader-bar-wrap">
-      <div class="loader-bar">
-        <div class="loader-bar-fill" id="loaderBar"></div>
-      </div>
-      <div class="loader-bar-info">
-        <span>در حال آماده‌سازی</span>
-        <span id="loaderPercent">۰٪</span>
-      </div>
-    </div>
-
+    <span class="loader-sweep" aria-hidden="true"></span>
   </div>
+
+  <div class="loader-caption" aria-hidden="true">
+    <span class="loader-caption-line"></span>
+    <span class="loader-caption-text">پیرایه خرد</span>
+    <span class="loader-caption-line"></span>
+  </div>
+
+  <div class="loader-iris" aria-hidden="true"></div>
+
 </div>
 
 <!-- ══════════════════ ATMOSPHERE ══════════════════ -->
-<div class="atmo-texture" aria-hidden="true"></div>
-<div class="atmo-grain" aria-hidden="true"></div>
 <div class="atmo-glow atmo-glow-1" aria-hidden="true"></div>
 <div class="atmo-glow atmo-glow-2" aria-hidden="true"></div>
+<div class="atmo-grain" aria-hidden="true"></div>
 <div class="atmo-vignette" aria-hidden="true"></div>
 
-<!-- ══════════════════ CINEMATIC FRAME ══════════════════ -->
-<div class="frame" aria-hidden="true">
-  <span class="frame-corner frame-corner-tl"></span>
-  <span class="frame-corner frame-corner-tr"></span>
-  <span class="frame-corner frame-corner-bl"></span>
-  <span class="frame-corner frame-corner-br"></span>
+<!-- ══════════════════ FILM FRAME (persistent) ══════════════════ -->
+<div class="film-frame" aria-hidden="true">
+  <span class="film-corner film-corner-tl"></span>
+  <span class="film-corner film-corner-tr"></span>
+  <span class="film-corner film-corner-bl"></span>
+  <span class="film-corner film-corner-br"></span>
+  <span class="film-edge film-edge-top"></span>
+  <span class="film-edge film-edge-bottom"></span>
 </div>
 
 <!-- ══════════════════ CURSOR ══════════════════ -->
@@ -91,13 +76,11 @@
     <span class="brand-mark">❈</span>
     <span class="brand-name">پیرایه خرد</span>
   </div>
-
   <div class="chapter-tag" aria-hidden="true">
     <span class="chapter-tag-line"></span>
     <span class="chapter-tag-text">باب‌البرهمن</span>
     <span class="chapter-tag-line"></span>
   </div>
-
   <button class="menu-btn" id="menu" type="button" aria-label="فهرست" aria-controls="drawer" aria-expanded="false">
     <span class="menu-btn-lines"><i></i><i></i></span>
     <span class="menu-btn-text">فهرست</span>
@@ -107,468 +90,450 @@
 <!-- ══════════════════ STAGE ══════════════════ -->
 <main id="stage" tabindex="-1" aria-live="polite">
 
-<!-- ═══════════ 01 — HERO ═══════════ -->
-<section class="slide slide-hero" data-title="آغاز" data-index="1" aria-label="آغاز حکایت">
+<!-- ═══════ 01 — HERO ═══════ -->
+<section class="slide slide-hero is-active" data-title="آغاز" aria-label="آغاز">
 
-  <div class="scene-aura" aria-hidden="true"></div>
+  <div class="scene-light scene-light-amber" aria-hidden="true"></div>
+  <div class="scene-light scene-light-teal" aria-hidden="true"></div>
 
-  <div class="hero-grid">
+  <div class="hero">
 
-    <div class="hero-frame" aria-hidden="true">
-      <div class="hero-frame-ring hero-frame-ring-1"></div>
-      <div class="hero-frame-ring hero-frame-ring-2"></div>
-      <div class="hero-frame-ring hero-frame-ring-3"></div>
-      <div class="hero-frame-glow"></div>
-      <div class="hero-frame-media">
+    <div class="hero-media" aria-hidden="true">
+      <div class="hero-media-iris"></div>
+      <div class="hero-media-frame">
+        <div class="hero-media-sprockets">
+          <span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
         <img src="assets/images/hero.png" alt="" loading="eager" decoding="async">
+        <div class="hero-media-shade"></div>
+        <div class="hero-media-ring"></div>
+        <div class="hero-media-ring hero-media-ring-2"></div>
       </div>
-      <div class="hero-frame-spin"></div>
+      <div class="hero-media-glow"></div>
     </div>
 
-    <div class="hero-content">
+    <div class="hero-copy">
 
-      <div class="kicker">
-        <span class="kicker-line"></span>
-        <span class="kicker-text">دوراندیشی · چاره‌گری · غفلت</span>
+      <div class="line" style="--d:.15s">
+        <span class="kicker">
+          <span class="kicker-line"></span>
+          <span class="kicker-text">دوراندیشی · چاره‌گری · غفلت</span>
+        </span>
       </div>
 
-      <h1 class="hero-h1">
-        <span class="hero-h1-line">پیرایه</span>
-        <span class="hero-h1-line hero-h1-accent">خرد</span>
+      <h1 class="hero-title">
+        <span class="hero-title-line" style="--d:.30s">
+          <span class="hero-title-inner">پیرایه</span>
+        </span>
+        <span class="hero-title-line hero-title-line-accent" style="--d:.48s">
+          <span class="hero-title-inner">خرد</span>
+        </span>
       </h1>
 
-      <div class="rule-ornament" aria-hidden="true">
-        <span class="rule-seg"></span>
-        <span class="rule-mark">❈</span>
-        <span class="rule-seg"></span>
+      <div class="line" style="--d:.65s">
+        <span class="ornament">
+          <span class="ornament-seg"></span>
+          <span class="ornament-diamond">◆</span>
+          <span class="ornament-seg"></span>
+        </span>
       </div>
 
       <p class="hero-lead">
-        سه ماهی، یک برکه و خطری که نزدیک می‌شود؛
-        حکایتی کوتاه که ارزش اندیشیدن پیش از حادثه را
-        به تصویر می‌کشد.
+        <span class="line" style="--d:.80s">سه ماهی، یک برکه و خطری که نزدیک می‌شود؛</span>
+        <span class="line" style="--d:.95s">حکایتی کوتاه که ارزش اندیشیدن پیش از</span>
+        <span class="line" style="--d:1.10s">حادثه را به تصویر می‌کشد.</span>
       </p>
 
-      <div class="hero-meta">
-        <span>۰۸ فصل</span>
-        <span class="hero-meta-dot"></span>
-        <span>یک حکایت</span>
-        <span class="hero-meta-dot"></span>
-        <span>یک پند</span>
+      <div class="line" style="--d:1.25s">
+        <div class="hero-meta">
+          <span>۰۸ فصل</span>
+          <span class="hero-meta-dot"></span>
+          <span>یک حکایت</span>
+          <span class="hero-meta-dot"></span>
+          <span>یک پند</span>
+        </div>
       </div>
 
-      <button class="cta" type="button" data-next>
-        <span class="cta-icon">←</span>
-        <span>ورود به حکایت</span>
-      </button>
+      <div class="line" style="--d:1.40s">
+        <button class="cta" type="button" data-next>
+          <span class="cta-icon">←</span>
+          <span class="cta-text">ورود به حکایت</span>
+        </button>
+      </div>
 
     </div>
 
   </div>
 
-  <div class="hero-badge" aria-hidden="true">
-    <span class="hero-badge-num">۰۱</span>
-    <span class="hero-badge-line"></span>
-    <span class="hero-badge-lbl">آغاز</span>
+  <div class="hero-side" aria-hidden="true">
+    <span class="hero-side-num">۰۱</span>
+    <span class="hero-side-line"></span>
+    <span class="hero-side-label">آغاز</span>
   </div>
 
 </section>
 
 
-<!-- ═══════════ 02 — INTRODUCTION ═══════════ -->
-<section class="slide slide-split" data-title="درآمد" data-index="2" aria-label="درآمد">
+<!-- ═══════ 02 — INTRODUCTION ═══════ -->
+<section class="slide slide-chapter" data-title="درآمد" aria-label="درآمد">
 
-  <div class="scene-aura" aria-hidden="true"></div>
+  <div class="scene-light scene-light-teal" aria-hidden="true"></div>
+  <div class="chapter-num" aria-hidden="true">۰۲</div>
 
-  <div class="layout">
-
-    <figure class="media media-pond">
-      <div class="media-inner">
+  <div class="chapter">
+    <figure class="media">
+      <div class="media-frame">
+        <div class="media-sprockets media-sprockets-l">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="media-sprockets media-sprockets-r">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
         <img src="assets/images/01.png" alt="" loading="lazy" decoding="async">
-        <div class="media-vignette"></div>
+        <div class="media-shade"></div>
         <div class="media-tint"></div>
-        <div class="media-frame"></div>
-        <div class="media-shine"></div>
-        <div class="media-number">۰۲</div>
       </div>
       <figcaption class="media-caption">
-        <span class="media-caption-dot"></span>
+        <span class="media-caption-mark">◆</span>
         برکه‌ای آرام، سه سرنوشت
       </figcaption>
     </figure>
 
     <article class="prose">
-
       <header class="prose-head">
-        <span class="prose-kicker">درآمد</span>
+        <span class="prose-kicker" style="--d:.25s">درآمد</span>
         <h2 class="prose-title">
-          برکه‌ای آرام،
-          <span class="prose-title-accent">سه سرنوشت</span>
+          <span class="prose-title-line" style="--d:.40s"><span>برکه‌ای آرام،</span></span>
+          <span class="prose-title-line prose-title-line-accent" style="--d:.55s"><span>سه سرنوشت</span></span>
         </h2>
-        <span class="prose-rule"></span>
+        <span class="prose-rule" style="--d:.70s"></span>
       </header>
 
       <div class="prose-body">
-        <p>
-          در روزگار قدیم، برکه‌ای دورافتاده بود؛ آبش زلال و کناره‌اش خاموش.
-          در همین آب آرام، سه ماهی زندگی می‌کردند:
-          <strong>حازم</strong>، <strong>زیرک</strong> و <strong>عاجز</strong>.
-        </p>
-        <p>
-          آرامش برکه برای هر سه یکسان بود، اما نگاهشان به آینده یکسان نبود.
-          یکی پیش از رسیدن خطر می‌اندیشید، دیگری در لحظه‌ی خطر راهی می‌جست
-          و سومی به آرامش ظاهری دل خوش می‌کرد.
-        </p>
+        <p class="line" style="--d:.85s">در روزگار قدیم، برکه‌ای دورافتاده بود؛ آبش زلال و کناره‌اش خاموش.</p>
+        <p class="line" style="--d:1.00s">در همین آب آرام، سه ماهی زندگی می‌کردند:</p>
+        <p class="line" style="--d:1.15s"><strong>حازم</strong>، <strong>زیرک</strong> و <strong>عاجز</strong>.</p>
+        <p class="line" style="--d:1.30s">آرامش برکه برای هر سه یکسان بود، اما نگاهشان به آینده یکسان نبود.</p>
+        <p class="line" style="--d:1.45s">یکی پیش از رسیدن خطر می‌اندیشید، دیگری در لحظه‌ی خطر راهی می‌جست و سومی به آرامش ظاهری دل خوش می‌کرد.</p>
 
-        <blockquote class="pullquote">
+        <blockquote class="pullquote" style="--d:1.60s">
           <span class="pullquote-mark">«</span>
-          <span class="pullquote-text">
-            آدمی را در آسودگی نمی‌آزمایند؛ آن‌گاه که حادثه نزدیک می‌شود،
-            شیوه‌ی اندیشیدن او آشکار می‌گردد.
-          </span>
+          <span class="pullquote-text">آدمی را در آسودگی نمی‌آزمایند؛ آن‌گاه که حادثه نزدیک می‌شود، شیوه‌ی اندیشیدن او آشکار می‌گردد.</span>
           <span class="pullquote-mark pullquote-mark-end">»</span>
         </blockquote>
       </div>
-
     </article>
-
   </div>
 
-  <div class="scene-index" aria-hidden="true">۰۲</div>
 </section>
 
 
-<!-- ═══════════ 03 — HAZEM ═══════════ -->
-<section class="slide slide-split slide-split-reverse" data-title="حازم" data-index="3" aria-label="حازم">
+<!-- ═══════ 03 — HAZEM ═══════ -->
+<section class="slide slide-chapter slide-chapter-rev" data-title="حازم" aria-label="حازم">
 
-  <div class="scene-aura" aria-hidden="true"></div>
+  <div class="scene-light scene-light-teal" aria-hidden="true"></div>
+  <div class="chapter-num" aria-hidden="true">۰۳</div>
 
-  <div class="layout">
-
-    <figure class="media media-hazem">
-      <div class="media-inner">
+  <div class="chapter">
+    <figure class="media">
+      <div class="media-frame">
+        <div class="media-sprockets media-sprockets-l">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="media-sprockets media-sprockets-r">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
         <img src="assets/images/02.png" alt="" loading="lazy" decoding="async">
-        <div class="media-vignette"></div>
-        <div class="media-tint"></div>
-        <div class="media-frame"></div>
-        <div class="media-shine"></div>
-        <div class="media-number">۰۳</div>
+        <div class="media-shade"></div>
+        <div class="media-tint media-tint-teal"></div>
       </div>
       <figcaption class="media-caption">
-        <span class="media-caption-dot"></span>
+        <span class="media-caption-mark">◆</span>
         پیش از توفان
       </figcaption>
     </figure>
 
     <article class="prose">
-
       <header class="prose-head">
-        <span class="prose-kicker">ماهی نخست</span>
+        <span class="prose-kicker" style="--d:.25s">ماهی نخست</span>
         <h2 class="prose-title">
-          حازم؛
-          <span class="prose-title-accent">پیش از توفان</span>
+          <span class="prose-title-line" style="--d:.40s"><span>حازم؛</span></span>
+          <span class="prose-title-line prose-title-line-accent" style="--d:.55s"><span>پیش از توفان</span></span>
         </h2>
-        <span class="prose-rule"></span>
+        <span class="prose-rule" style="--d:.70s"></span>
       </header>
 
       <div class="prose-body">
-        <p>
-          چون بانگ شکارگران برخاست، حازم خطر را همان لحظه شناخت.
-          برای او، صبر کردن به معنای بی‌عمل ماندن نبود؛
-          برعکس، فهمید که هنوز فرصت انتخاب دارد.
-        </p>
-        <p>
-          او راه ماندن را با راه رفتن مقایسه کرد و دانست که آبگیر دیگر جای امنی نیست.
-          پس پیش از آنکه حادثه به او برسد، راهی به سوی برکه‌ای دیگر جست و بی‌درنگ رفت.
-        </p>
+        <p class="line" style="--d:.85s">چون بانگ شکارگران برخاست، حازم خطر را همان لحظه شناخت.</p>
+        <p class="line" style="--d:1.00s">برای او، صبر کردن به معنای بی‌عمل ماندن نبود؛ برعکس، فهمید که هنوز فرصت انتخاب دارد.</p>
+        <p class="line" style="--d:1.15s">او راه ماندن را با راه رفتن مقایسه کرد و دانست که آبگیر دیگر جای امنی نیست.</p>
+        <p class="line" style="--d:1.30s">پس پیش از آنکه حادثه به او برسد، راهی به سوی برکه‌ای دیگر جست و بی‌درنگ رفت.</p>
 
-        <aside class="note">
-          <span class="note-num" aria-hidden="true">I</span>
-          <div class="note-body">
-            <strong class="note-title">خصلت حازم</strong>
-            <span class="note-text">دیدنِ پیامد پیش از آنکه پیامد گریبان‌گیر شود.</span>
+        <aside class="seal" style="--d:1.45s">
+          <div class="seal-mark" aria-hidden="true"><span>I</span></div>
+          <div class="seal-body">
+            <strong class="seal-title">خصلت حازم</strong>
+            <span class="seal-text">دیدنِ پیامد پیش از آنکه پیامد گریبان‌گیر شود.</span>
           </div>
         </aside>
       </div>
-
     </article>
-
   </div>
 
-  <div class="scene-index" aria-hidden="true">۰۳</div>
 </section>
 
 
-<!-- ═══════════ 04 — ZIRAK ═══════════ -->
-<section class="slide slide-split" data-title="زیرک" data-index="4" aria-label="زیرک">
+<!-- ═══════ 04 — ZIRAK ═══════ -->
+<section class="slide slide-chapter" data-title="زیرک" aria-label="زیرک">
 
-  <div class="scene-aura" aria-hidden="true"></div>
+  <div class="scene-light scene-light-amber" aria-hidden="true"></div>
+  <div class="chapter-num" aria-hidden="true">۰۴</div>
 
-  <div class="layout">
-
-    <figure class="media media-zirak">
-      <div class="media-inner">
+  <div class="chapter">
+    <figure class="media">
+      <div class="media-frame">
+        <div class="media-sprockets media-sprockets-l">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="media-sprockets media-sprockets-r">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
         <img src="assets/images/03.png" alt="" loading="lazy" decoding="async">
-        <div class="media-vignette"></div>
-        <div class="media-tint"></div>
-        <div class="media-frame"></div>
-        <div class="media-shine"></div>
-        <div class="media-number">۰۴</div>
+        <div class="media-shade"></div>
+        <div class="media-tint media-tint-amber"></div>
       </div>
       <figcaption class="media-caption">
-        <span class="media-caption-dot"></span>
+        <span class="media-caption-mark">◆</span>
         چاره در میانه‌ی خطر
       </figcaption>
     </figure>
 
     <article class="prose">
-
       <header class="prose-head">
-        <span class="prose-kicker">ماهی دوم</span>
+        <span class="prose-kicker" style="--d:.25s">ماهی دوم</span>
         <h2 class="prose-title">
-          زیرک؛
-          <span class="prose-title-accent">چاره در میانه‌ی خطر</span>
+          <span class="prose-title-line" style="--d:.40s"><span>زیرک؛</span></span>
+          <span class="prose-title-line prose-title-line-accent" style="--d:.55s"><span>چاره در میانه‌ی خطر</span></span>
         </h2>
-        <span class="prose-rule"></span>
+        <span class="prose-rule" style="--d:.70s"></span>
       </header>
 
       <div class="prose-body">
-        <p>
-          زیرک مانند حازم از همان آغاز نرفت. لحظه‌ای درنگ کرد؛
-          اما وقتی خطر به واقعیت بدل شد، دست از اندیشیدن نکشید.
-        </p>
-        <p>
-          او خود را مرده پنداشت و بر پهلو افتاد. شکارگر او را از آب بیرون کشید.
-          درست در همان لحظه، زیرک از فرصت استفاده کرد،
-          با تابی ناگهانی خود را به آب بازگرداند و رَست.
-        </p>
+        <p class="line" style="--d:.85s">زیرک مانند حازم از همان آغاز نرفت. لحظه‌ای درنگ کرد؛</p>
+        <p class="line" style="--d:1.00s">اما وقتی خطر به واقعیت بدل شد، دست از اندیشیدن نکشید.</p>
+        <p class="line" style="--d:1.15s">او خود را مرده پنداشت و بر پهلو افتاد. شکارگر او را از آب بیرون کشید.</p>
+        <p class="line" style="--d:1.30s">درست در همان لحظه، زیرک از فرصت استفاده کرد، با تابی ناگهانی خود را به آب بازگرداند و رَست.</p>
 
-        <aside class="note">
-          <span class="note-num" aria-hidden="true">II</span>
-          <div class="note-body">
-            <strong class="note-title">خصلت زیرک</strong>
-            <span class="note-text">اگر فرصت نخست از دست رفت، هنوز می‌توان در بحران راهی برای نجات یافت.</span>
+        <aside class="seal" style="--d:1.45s">
+          <div class="seal-mark" aria-hidden="true"><span>II</span></div>
+          <div class="seal-body">
+            <strong class="seal-title">خصلت زیرک</strong>
+            <span class="seal-text">اگر فرصت نخست از دست رفت، هنوز می‌توان در بحران راهی برای نجات یافت.</span>
           </div>
         </aside>
       </div>
-
     </article>
-
   </div>
 
-  <div class="scene-index" aria-hidden="true">۰۴</div>
 </section>
 
 
-<!-- ═══════════ 05 — AJEZ ═══════════ -->
-<section class="slide slide-split slide-split-reverse" data-title="عاجز" data-index="5" aria-label="عاجز">
+<!-- ═══════ 05 — AJEZ ═══════ -->
+<section class="slide slide-chapter slide-chapter-rev" data-title="عاجز" aria-label="عاجز">
 
-  <div class="scene-aura" aria-hidden="true"></div>
+  <div class="scene-light scene-light-crimson" aria-hidden="true"></div>
+  <div class="chapter-num" aria-hidden="true">۰۵</div>
 
-  <div class="layout">
-
-    <figure class="media media-ajez">
-      <div class="media-inner">
+  <div class="chapter">
+    <figure class="media">
+      <div class="media-frame">
+        <div class="media-sprockets media-sprockets-l">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="media-sprockets media-sprockets-r">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
         <img src="assets/images/04.png" alt="" loading="lazy" decoding="async">
-        <div class="media-vignette"></div>
-        <div class="media-tint"></div>
-        <div class="media-frame"></div>
-        <div class="media-shine"></div>
-        <div class="media-number">۰۵</div>
+        <div class="media-shade"></div>
+        <div class="media-tint media-tint-crimson"></div>
       </div>
       <figcaption class="media-caption">
-        <span class="media-caption-dot"></span>
+        <span class="media-caption-mark media-caption-mark-danger">◆</span>
         وقتی غفلت دیر می‌شود
       </figcaption>
     </figure>
 
     <article class="prose">
-
       <header class="prose-head">
-        <span class="prose-kicker">ماهی سوم</span>
+        <span class="prose-kicker" style="--d:.25s">ماهی سوم</span>
         <h2 class="prose-title">
-          عاجز؛
-          <span class="prose-title-accent">وقتی غفلت دیر می‌شود</span>
+          <span class="prose-title-line" style="--d:.40s"><span>عاجز؛</span></span>
+          <span class="prose-title-line prose-title-line-accent" style="--d:.55s"><span>وقتی غفلت دیر می‌شود</span></span>
         </h2>
-        <span class="prose-rule prose-rule-danger"></span>
+        <span class="prose-rule prose-rule-danger" style="--d:.70s"></span>
       </header>
 
       <div class="prose-body">
-        <p>
-          عاجز نه تدبیری اندیشید و نه خطری را جدی گرفت.
-          آب آرام بود و همین آرامش، او را آسوده کرد؛
-          گویی سکونِ امروز می‌توانست خطرِ فردا را از میان ببرد.
-        </p>
-        <p>
-          اما حادثه منتظر آمادگی کسی نمی‌ماند. دام آمد و او را برد.
-          آن‌گاه پشیمانی دیگر سودی نداشت؛
-          زیرا فرصتی که در آرامش وجود داشت، در هنگام گرفتاری دیگر وجود نداشت.
-        </p>
+        <p class="line" style="--d:.85s">عاجز نه تدبیری اندیشید و نه خطری را جدی گرفت.</p>
+        <p class="line" style="--d:1.00s">آب آرام بود و همین آرامش، او را آسوده کرد؛ گویی سکونِ امروز می‌توانست خطرِ فردا را از میان ببرد.</p>
+        <p class="line" style="--d:1.15s">اما حادثه منتظر آمادگی کسی نمی‌ماند. دام آمد و او را برد.</p>
+        <p class="line" style="--d:1.30s">آن‌گاه پشیمانی دیگر سودی نداشت؛ زیرا فرصتی که در آرامش وجود داشت، در هنگام گرفتاری دیگر وجود نداشت.</p>
 
-        <aside class="note note-danger">
-          <span class="note-num" aria-hidden="true">III</span>
-          <div class="note-body">
-            <strong class="note-title">هشدار حکایت</strong>
-            <span class="note-text">غفلت، زمانی خطرناک می‌شود که فرصتِ چاره هنوز هست اما جدی گرفته نمی‌شود.</span>
+        <aside class="seal seal-danger" style="--d:1.45s">
+          <div class="seal-mark" aria-hidden="true"><span>III</span></div>
+          <div class="seal-body">
+            <strong class="seal-title">هشدار حکایت</strong>
+            <span class="seal-text">غفلت، زمانی خطرناک می‌شود که فرصتِ چاره هنوز هست اما جدی گرفته نمی‌شود.</span>
           </div>
         </aside>
       </div>
-
     </article>
-
   </div>
 
-  <div class="scene-index" aria-hidden="true">۰۵</div>
 </section>
 
 
-<!-- ═══════════ 06 — ANALYSIS ═══════════ -->
-<section class="slide slide-analysis" data-title="تحلیل" data-index="6" aria-label="تحلیل">
+<!-- ═══════ 06 — ANALYSIS ═══════ -->
+<section class="slide slide-analysis" data-title="تحلیل" aria-label="تحلیل">
 
-  <div class="scene-aura" aria-hidden="true"></div>
+  <div class="scene-light scene-light-amber" aria-hidden="true"></div>
+  <div class="chapter-num" aria-hidden="true">۰۶</div>
 
-  <div class="analysis-wrap">
+  <div class="analysis">
 
     <header class="analysis-head">
-      <span class="prose-kicker">خوانش حکایت</span>
+      <span class="prose-kicker" style="--d:.25s">خوانش حکایت</span>
       <h2 class="analysis-title">
-        سه ماهی،
-        <span class="prose-title-accent">سه شیوه‌ی زندگی</span>
+        <span class="prose-title-line" style="--d:.40s"><span>سه ماهی،</span></span>
+        <span class="prose-title-line prose-title-line-accent" style="--d:.55s"><span>سه شیوه‌ی زندگی</span></span>
       </h2>
-      <span class="prose-rule"></span>
-      <p class="analysis-lead">
-        داستان در ظاهر درباره‌ی سه ماهی است؛ اما ساختار تمثیلی آن،
-        سه واکنش انسانی در برابر آینده و حادثه را روبه‌روی هم می‌گذارد.
-      </p>
+      <span class="prose-rule" style="--d:.70s"></span>
+      <p class="analysis-lead line" style="--d:.85s">داستان در ظاهر درباره‌ی سه ماهی است؛ اما ساختار تمثیلی آن، سه واکنش انسانی در برابر آینده و حادثه را روبه‌روی هم می‌گذارد.</p>
     </header>
 
-    <div class="analysis-grid">
-
-      <article class="tile">
+    <div class="tiles">
+      <article class="tile" style="--d:1.00s">
         <span class="tile-num">۰۱</span>
         <span class="tile-tag">تمثیل</span>
         <h3>تمثیل</h3>
         <p>سه ماهی، سه سیمای آدمی‌اند؛ حازم نماد دوراندیشی، زیرک نماد چاره‌گری و عاجز نماد غفلت.</p>
       </article>
 
-      <article class="tile">
+      <article class="tile" style="--d:1.14s">
         <span class="tile-num">۰۲</span>
         <span class="tile-tag">تقابل</span>
         <h3>تضاد</h3>
         <p>تقابل اصلی میان «تدبیر» و «تسلیم» شکل می‌گیرد؛ یکی پیش از حادثه می‌بیند و دیگری پس از آن پشیمان می‌شود.</p>
       </article>
 
-      <article class="tile">
+      <article class="tile" style="--d:1.28s">
         <span class="tile-num">۰۳</span>
         <span class="tile-tag">نشانه</span>
         <h3>نماد</h3>
         <p>برکه، جهانی محدود و ظاهراً امن است؛ شکارگر و دام، نشانه‌ی حادثه‌ای هستند که آرامش ظاهری را برهم می‌زنند.</p>
       </article>
 
-      <article class="tile">
+      <article class="tile" style="--d:1.42s">
         <span class="tile-num">۰۴</span>
         <span class="tile-tag">روایت</span>
         <h3>زبان</h3>
         <p>روایت بر ایجاز، کنایه و نتیجه‌گیری اخلاقی تکیه دارد؛ همان ویژگی‌ای که حکایت را از یک قصه‌ی صرف فراتر می‌برد.</p>
       </article>
-
     </div>
 
   </div>
 
-  <div class="scene-index" aria-hidden="true">۰۶</div>
 </section>
 
 
-<!-- ═══════════ 07 — MESSAGE ═══════════ -->
-<section class="slide slide-message" data-title="پیام" data-index="7" aria-label="پیام">
+<!-- ═══════ 07 — MESSAGE ═══════ -->
+<section class="slide slide-message" data-title="پیام" aria-label="پیام">
 
-  <div class="scene-aura" aria-hidden="true"></div>
+  <div class="scene-light scene-light-amber" aria-hidden="true"></div>
+  <div class="chapter-num" aria-hidden="true">۰۷</div>
 
-  <div class="message-ornament message-ornament-1" aria-hidden="true"></div>
-  <div class="message-ornament message-ornament-2" aria-hidden="true"></div>
+  <div class="ornament-bg ornament-bg-1" aria-hidden="true"></div>
+  <div class="ornament-bg ornament-bg-2" aria-hidden="true"></div>
 
-  <div class="message-block">
+  <div class="message">
 
-    <div class="message-emblem">
+    <div class="message-emblem" style="--d:.25s">
       <span class="message-emblem-glyph">❈</span>
       <span class="message-emblem-ring"></span>
       <span class="message-emblem-ring message-emblem-ring-2"></span>
     </div>
 
-    <span class="prose-kicker">جانِ حکایت</span>
+    <span class="prose-kicker" style="--d:.40s">جانِ حکایت</span>
 
     <h2 class="message-title">
-      خرد، زیور زندگی است؛
-      <span class="message-title-accent">و غفلت، آغاز گرفتاری.</span>
+      <span class="prose-title-line" style="--d:.55s"><span>خرد، زیور زندگی است؛</span></span>
+      <span class="prose-title-line prose-title-line-accent" style="--d:.72s"><span>و غفلت، آغاز گرفتاری.</span></span>
     </h2>
 
-    <span class="prose-rule prose-rule-center"></span>
+    <span class="prose-rule prose-rule-center" style="--d:.88s"></span>
 
-    <p class="message-text">
-      حازم به ما یادآوری می‌کند که بهترین زمانِ چاره‌جویی، پیش از وقوع حادثه است.
-      زیرک نشان می‌دهد که حتی در بحران نیز اندیشه می‌تواند راه نجات بسازد.
-      عاجز هشدار می‌دهد که آسودگیِ امروز، تضمینِ فردا نیست.
-    </p>
+    <p class="message-text line" style="--d:1.05s">حازم به ما یادآوری می‌کند که بهترین زمانِ چاره‌جویی، پیش از وقوع حادثه است.</p>
+    <p class="message-text line" style="--d:1.20s">زیرک نشان می‌دهد که حتی در بحران نیز اندیشه می‌تواند راه نجات بسازد.</p>
+    <p class="message-text line" style="--d:1.35s">عاجز هشدار می‌دهد که آسودگیِ امروز، تضمینِ فردا نیست.</p>
 
-    <div class="message-signature">
-      <span class="message-signature-line"></span>
-      <span>پیرایه خرد · در باب دوراندیشی و چاره‌گری</span>
-      <span class="message-signature-line"></span>
+    <div class="message-sign" style="--d:1.50s">
+      <span class="message-sign-line"></span>
+      <span class="message-sign-text">پیرایه خرد</span>
+      <span class="message-sign-line"></span>
     </div>
 
   </div>
 
-  <div class="scene-index" aria-hidden="true">۰۷</div>
 </section>
 
 
-<!-- ═══════════ 08 — END ═══════════ -->
-<section class="slide slide-end" data-title="پایان" data-index="8" aria-label="پایان">
+<!-- ═══════ 08 — END ═══════ -->
+<section class="slide slide-end" data-title="پایان" aria-label="پایان">
 
-  <div class="scene-aura" aria-hidden="true"></div>
+  <div class="scene-light scene-light-amber" aria-hidden="true"></div>
+  <div class="chapter-num" aria-hidden="true">۰۸</div>
 
   <div class="end-orbit" aria-hidden="true">
-    <span class="end-orbit-ring end-orbit-ring-1"></span>
+    <span class="end-orbit-ring"></span>
     <span class="end-orbit-ring end-orbit-ring-2"></span>
     <span class="end-orbit-ring end-orbit-ring-3"></span>
   </div>
 
-  <div class="end-block">
+  <div class="end">
 
-    <div class="end-emblem">
+    <div class="end-emblem" style="--d:.25s">
       <span class="end-emblem-glyph">❈</span>
       <span class="end-emblem-glow"></span>
     </div>
 
-    <span class="prose-kicker">پایان حکایت</span>
+    <span class="prose-kicker" style="--d:.40s">پایان حکایت</span>
 
     <h2 class="end-title">
-      آن‌که پیش از حادثه
-      <span class="end-title-accent">می‌اندیشد، راه می‌یابد.</span>
+      <span class="prose-title-line" style="--d:.55s"><span>آن‌که پیش از حادثه</span></span>
+      <span class="prose-title-line prose-title-line-accent" style="--d:.72s"><span>می‌اندیشد، راه می‌یابد.</span></span>
     </h2>
 
-    <span class="prose-rule prose-rule-center"></span>
+    <span class="prose-rule prose-rule-center" style="--d:.88s"></span>
 
-    <p class="end-text">
-      این حکایت، کوتاه است؛ اما پرسشی بلند در برابر ما می‌گذارد:
-      اگر نشانه‌ی خطر را امروز ببینیم، فردا چه خواهیم کرد؟
-    </p>
+    <p class="end-text line" style="--d:1.05s">این حکایت، کوتاه است؛ اما پرسشی بلند در برابر ما می‌گذارد:</p>
+    <p class="end-text line" style="--d:1.20s">اگر نشانه‌ی خطر را امروز ببینیم، فردا چه خواهیم کرد؟</p>
 
-    <button class="cta cta-restart" id="restart" type="button">
-      <span class="cta-icon">↻</span>
-      <span>بازگشت به آغاز</span>
-    </button>
+    <div class="line" style="--d:1.35s">
+      <button class="cta cta-restart" id="restart" type="button">
+        <span class="cta-icon">↻</span>
+        <span class="cta-text">بازگشت به آغاز</span>
+      </button>
+    </div>
 
-    <div class="end-signature">
-      <span class="end-signature-line"></span>
-      <span class="end-signature-text">آرمین نیکنام</span>
-      <span class="end-signature-line"></span>
+    <div class="end-sign" style="--d:1.55s">
+      <span class="end-sign-line"></span>
+      <span class="end-sign-text">آرمین نیکنام</span>
+      <span class="end-sign-line"></span>
     </div>
 
   </div>
 
-  <div class="scene-index" aria-hidden="true">۰۸</div>
 </section>
 
 </main>
@@ -594,24 +559,19 @@
 <!-- ══════════════════ DRAWER ══════════════════ -->
 <div class="drawer-backdrop" id="drawerBackdrop" aria-hidden="true"></div>
 
-<aside class="drawer" id="drawer" aria-label="فهرست حکایت" aria-hidden="true">
-
+<aside class="drawer" id="drawer" aria-label="فهرست" aria-hidden="true">
   <button class="drawer-close" id="closeDrawer" type="button" aria-label="بستن">×</button>
-
   <div class="drawer-head">
     <span class="drawer-head-kicker">پیرایه خرد</span>
     <h3>فهرست حکایت</h3>
     <p>هشت پرده از یک حکایت</p>
   </div>
-
   <div id="drawerItems" class="drawer-items"></div>
-
   <div class="drawer-foot">
     <span class="drawer-foot-line"></span>
     <span>کلیله و دمنه</span>
     <span class="drawer-foot-line"></span>
   </div>
-
 </aside>
 
 <script src="assets/js/script.js" defer></script>
